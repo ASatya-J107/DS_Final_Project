@@ -1,7 +1,7 @@
 import streamlit as st
 import pickle
 import pandas as pd
-import scikit-learn
+import sklearn
 
 with open('model/elastic_math_model.pkl','rb') as file:
     elastic_math_model = pickle.load(file)
