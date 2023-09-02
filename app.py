@@ -41,30 +41,9 @@ def main():
     if button:
         #make prediction
         math_scores, read_scores, write_scores = predict(gen, Eth, ParEdu, LunTyp, TesPre, ParMaritStat, PracSpo, Is1stkid, NrSib, Trans, Weekly)
-        if math_scores >= 75:
-            st.success("Math Scores: {:.2f}".format(math_scores[0]))
-        else:
-            if math_scores >= 70:
-                st.warning("Math Scores: {:.2f}".format(math_scores[0]))
-            else:
-                st.error("Math Scores: {:.2f}".format(math_scores[0]))
-
-        if read_scores >= 75:
-            st.success("Reading Scores: {:.2f}".format(read_scores[0]))
-        else:
-            if read_scores >= 70:
-                st.warning("Reading Scores: {:.2f}".format(math_scores[0]))
-            else:
-                st.error("Reading Scores: {:.2f}".format(math_scores[0]))
-
-        if write_scores >= 75:
-            st.success("Write Scores: {:.2f}".format(write_scores[0]))
-        else:
-            if write_scores >= 70:
-                st.warning("Write Scores: {:.2f}".format(math_scores[0]))
-            else:
-                st.error("Write Scores: {:.2f}".format(math_scores[0]))
-
+        st.success("Math Scores: {:.2f}".format(math_scores[0]))
+        st.success("Reading Scores: {:.2f}".format(read_scores[0]))
+        st.success("Write Scores: {:.2f}".format(write_scores[0]))
 
 def predict(gen, Eth, ParEdu, LunTyp, TesPre, ParMaritStat, PracSpo, Is1stkid, NrSib, Trans, Weekly):
     #processing user input
