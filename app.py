@@ -24,16 +24,16 @@ def main():
                 </div>"""
     st.markdown(design, unsafe_allow_html=True)
     left, right = st.columns((2, 2))
-    gen = left.selectbox('Gender', ('female', 'male'))
+    gen = left.selectbox('Gender', ('Female', 'Male'))
     Eth = right.selectbox('Ethnic Group', ('group A', 'group B', 'group C', 'group D', 'group E'))
-    ParEdu = left.selectbox('Parent Education', ('associates degree', 'bachelors degree', 'high school', 'masters degree','some college','some high school'))
-    LunTyp = right.selectbox('Lunch Type', ('free/reduced', 'standard'))
-    TesPre = left.selectbox('Test Preparation', ('none', 'completed'))
-    ParMaritStat = right.selectbox('Parent Marital Status', ('divorced', 'married', 'single', 'widowed'))
-    PracSpo = left.selectbox('Practice Sport', ('never', 'regularly', 'sometimes'))
-    Is1stkid = right.selectbox('First Child', ('yes', 'no'))
+    ParEdu = left.selectbox('Parent Education', ('High School','College', 'Associates Degree', 'Bachelors Degree', 'Masters Degree'))
+    LunTyp = right.selectbox('Lunch Type', ('Free/Reduced', 'Standard'))
+    TesPre = left.selectbox('Test Preparation', ('None', 'Completed'))
+    ParMaritStat = right.selectbox('Parent Marital Status', ('Divorced', 'Married', 'Single', 'Widowed'))
+    PracSpo = left.selectbox('Practice Sport', ('Never', 'Sometimes', 'Regularly'))
+    Is1stkid = right.selectbox('First Child', ('Yes', 'No'))
     NrSib = left.number_input('Number of Sibling', step=1, value=0, format="%d")
-    Trans = right.selectbox('Mode of Transportation', ('private', 'school_bus'))
+    Trans = right.selectbox('Mode of Transportation', ('Private', 'School Bus'))
     Weekly = st.selectbox('Weekly Study Hours', ('Less than 5 hours', 'Between 5-10 hours', 'More than 10 hours'))
     button = st.button('Predict')
 
@@ -58,39 +58,69 @@ def predict(gen, Eth, ParEdu, LunTyp, TesPre, ParMaritStat, PracSpo, Is1stkid, N
                 'NrSiblings': NrSib,
                 'TransportMeans': Trans,
                 'WklyStudyHours': Weekly}
-
+    
     tmp=pd.DataFrame.from_dict(data_baru,orient='index').transpose()
+
     # Mapping the Gender
     gender_mapping = {
-        'female': 0,
-        'male': 1
+        'Female': 0,
+        'Male': 1
     }
 
     # Mapping the LunchType
     lunch_mapping = {
-        'free/reduced': 0,
-        'standard': 1
+        'Free/Reduced': 0,
+        'Standard': 1
     }
-
-    # Converting IsFirstChild to object type
-    tmp['IsFirstChild'] = tmp['IsFirstChild'].astype(object)
 
     # Mapping the IsFirstChild
     value_mapping = {
-        'no': 0,
-        'yes': 1
+        'No': 0,
+        'Yes': 1
     }
 
     # Mapping the TestPrep
     test_mapping = {
-        'none': 0,
-        'completed': 1
+        'None': 0,
+        'Completed': 1
     }
 
     # Mapping the Schoolbus
     bus_mapping = {
-        'private': 0,
-        'school_bus': 1
+        'Private': 0,
+        'School Bus': 1
+    }
+
+    # Mapping the Sport Activity
+    sport_mapping = {
+        'Never': 0,
+        'Sometimes': 1,
+        'Regularly': 2
+    }
+
+    # Mapping the Parent Education
+    pedu_mapping = {
+        'High School': 0,
+        'College': 1,
+        'Associates Degree': 2,
+        'Bachelors Degree':3,
+        'Masters Degree':4
+    }
+
+    # Mapping the Weekly Study Hours
+    weekly_mapping = {
+        'Less than 5 hours': 0,
+        'Between 5-10 hours': 1,
+        'More than 10 hours': 2
+    }
+
+    # Mapping the Ethnic Group
+    ethnic_mapping = {
+        'group A': 0,
+        'group B': 1,
+        'group C': 2,
+        'group D': 3,
+        'group E': 4
     }
 
     # Fixing the values in the column
@@ -99,9 +129,13 @@ def predict(gen, Eth, ParEdu, LunTyp, TesPre, ParMaritStat, PracSpo, Is1stkid, N
     tmp['IsFirstChild'] = tmp['IsFirstChild'].map(value_mapping)
     tmp['TestPrep'] = tmp['TestPrep'].map(test_mapping)
     tmp['TransportMeans'] = tmp['TransportMeans'].map(bus_mapping)
+    tmp['PracticeSport'] = tmp['PracticeSport'].map(sport_mapping)
+    tmp['ParentEduc'] = tmp['ParentEduc'].map(pedu_mapping)
+    tmp['WklyStudyHours'] = tmp['WklyStudyHours'].map(weekly_mapping)
+    tmp['EthnicGroup'] = tmp['EthnicGroup'].map(ethnic_mapping)
 
     #One Hot Encoding
-    categorical_cols = ['EthnicGroup', 'ParentEduc', 'ParentMaritalStatus', 'PracticeSport', 'WklyStudyHours']
+    categorical_cols = ['ParentMaritalStatus']
     for col in categorical_cols:
         tmp = pd.get_dummies(tmp, columns=[col], prefix = [col], drop_first=False)
 
